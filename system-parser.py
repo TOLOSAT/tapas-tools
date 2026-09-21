@@ -435,7 +435,7 @@ const timerConf_t IN_CONFIG_SECTION g_timers_conf_table[] =
 
     write_generated_file(timers_c_filename, c_content)
 
-    # --- Construct the .h file (inchangé) ---
+    # --- Construct the .h file ---
     h_content = f"""/**
  * @file    timers_conf.h
  * @brief   Header file for timer configuration
@@ -504,12 +504,12 @@ reportEventCallback_t p_ReportEvent = {callback_name};
 # ==============================================================================
 
 def generate_system_conf_header(output_directory):
-    """Génère un header agrégateur conf/system_conf.h qui inclut toutes les confs."""
+    """Generate the conf/system_conf.h header that includes all configuration headers."""
     system_h_filename = os.path.join(output_directory, "system_conf.h")
 
     content = f"""/**
  * @file    system_conf.h
- * @brief   Header agrégateur pour inclure toutes les configurations du système
+ * @brief   Aggregate header including all system configuration headers
  * @author  Auto-generated
  *
  * @copyright Copyright (c) TOLOSAT 2026
@@ -534,10 +534,10 @@ def generate_system_conf_header(output_directory):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Génère les fichiers de configuration C/H du système embarqué à partir d'un fichier JSON unique."
+        description="Generate embedded-system C/H configuration files from a single JSON file."
     )
-    parser.add_argument("-i", "--input", required=True, help="Chemin vers le fichier JSON d'entrée")
-    parser.add_argument("-o", "--output", required=True, help="Dossier de destination des fichiers générés")
+    parser.add_argument("-i", "--input", required=True, help="Path to the input JSON file")
+    parser.add_argument("-o", "--output", required=True, help="Output directory for generated files")
     args = parser.parse_args()
 
     if not os.path.exists(args.output):
@@ -563,7 +563,7 @@ def main():
     generate_timers_conf(system["timers"], args.output)
     generate_callback_conf(system["reportevent"], args.output)
 
-    # Generate the agragator header of conf
+    # Generate the aggregate configuration header
     generate_system_conf_header(args.output)
 
 if __name__ == "__main__":

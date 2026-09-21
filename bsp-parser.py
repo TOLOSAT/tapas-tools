@@ -238,7 +238,7 @@ def generate_system_peripherals_conf(peripherals, output_directory):
 
         def render_param(param, value):
             if isinstance(value, str) and value.startswith("CONFIG_"):
-                # Vérifier si on a une valeur par défaut après un pipe
+                # Check whether a fallback value is provided after a pipe
                 if "|" in value:
                     macro, default_val = value.split("|", 1)
                 else:
@@ -487,10 +487,10 @@ memoryDesc_t g_memories_desc_table[CONFIG_MAX_NB_MEMORIES] =
 # ==============================================================================
 def main():
     parser = argparse.ArgumentParser(
-        description="Génère les fichiers de configuration C/H du système embarqué à partir d'un fichier JSON unique."
+        description="Generate embedded-system C/H configuration files from a single JSON file."
     )
-    parser.add_argument("-i", "--input", required=True, help="Chemin vers le fichier JSON d'entrée")
-    parser.add_argument("-o", "--output", required=True, help="Dossier de destination des fichiers générés")
+    parser.add_argument("-i", "--input", required=True, help="Path to the input JSON file")
+    parser.add_argument("-o", "--output", required=True, help="Output directory for generated files")
     args = parser.parse_args()
 
     if not os.path.exists(args.output):

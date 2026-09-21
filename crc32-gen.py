@@ -25,7 +25,7 @@ def calculate_crc32(input_file, output_file=None):
     except FileNotFoundError:
         print(f"The {input_file} file was not found.")
     except Exception as e:
-        print(f"Une erreur est survenue : {e}")
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     # Configuring the argument analyser
