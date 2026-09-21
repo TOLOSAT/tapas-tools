@@ -194,7 +194,7 @@ def generate_system_peripherals_conf(peripherals, output_directory):
 
 /******************************* Include Files *******************************/
 
-#include "autoconf.h"
+#include "kernel_autoconf.h"
 #include "system_peripherals_conf.h"
 #include "drivers/peripherals.h"
 

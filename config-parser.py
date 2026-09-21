@@ -51,21 +51,30 @@ def is_owned_option(option, owned_symbols):
     return option.startswith("CONFIG_") and option[7:] in owned_symbols
 
 
-def parse_config(config_file, output_dir, owned_symbols):
+def make_header_guard(header_name):
+    """Derive a valid and predictable include guard from a header filename."""
+    guard = re.sub(r"[^A-Za-z0-9]", "_", header_name).upper()
+    if guard[0].isdigit():
+        guard = f"_{guard}"
+    return guard
+
+
+def parse_config(config_file, output_dir, owned_symbols, header_name):
     # Define the output header file
-    output_file = os.path.join(output_dir, 'autoconf.h')
+    output_file = os.path.join(output_dir, header_name)
+    header_guard = make_header_guard(header_name)
 
     content = [f"""/**
- * @file    autoconf.h
- * @brief   Header file for buffer configuration
+ * @file    {header_name}
+ * @brief   Generated module configuration
  * @author  Auto-generated
  *
  * @copyright Copyright (c) TOLOSAT 2026
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#ifndef AUTOCONF_H
-#define AUTOCONF_H
+#ifndef {header_guard}
+#define {header_guard}
 
 """]
 
@@ -102,15 +111,22 @@ def parse_config(config_file, output_dir, owned_symbols):
                 else:
                     content.append(f"#define {option} {value}\n")
 
-    content.append("\n#endif /* AUTOCONF_H */\n")
+    content.append(f"\n#endif /* {header_guard} */\n")
     write_generated_file(output_file, "".join(content))
 
 
 def main():
     # Set up argument parsing
-    parser = argparse.ArgumentParser(description="Generate autoconf.h from a .config file.")
+    parser = argparse.ArgumentParser(
+        description="Generate a scoped C configuration header from a Kconfig .config file."
+    )
     parser.add_argument('-i', '--input', required=True, help="Path to the input .config file")
     parser.add_argument('-o', '--output', required=True, help="Path to the output directory")
+    parser.add_argument(
+        '--header-name',
+        default='autoconf.h',
+        help="Generated header filename (default: autoconf.h)",
+    )
     parser.add_argument(
         '-k',
         '--kconfig',
@@ -126,7 +142,15 @@ def main():
         os.makedirs(args.output)
 
     # Call the parsing function
-    parse_config(args.input, args.output, parse_kconfig_symbols(args.kconfig))
+    if not args.header_name or os.path.basename(args.header_name) != args.header_name:
+        parser.error("--header-name must be a filename without directory components")
+
+    parse_config(
+        args.input,
+        args.output,
+        parse_kconfig_symbols(args.kconfig),
+        args.header_name,
+    )
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ and development tools used by TAPAS and projects built on top of it.
 | Tool | Purpose |
 | --- | --- |
 | `bsp-parser.py` | Generate TAPAS BSP configuration sources from a board description. |
-| `config-parser.py` | Generate a scoped `autoconf.h` from a Kconfig `.config` file. |
+| `config-parser.py` | Generate a scoped, optionally module-named header from a Kconfig `.config` file. |
 | `crc32-gen.py` | Append the firmware CRC during final image generation. |
 | `format-code.sh` | Apply clang-format to project-owned C and header files. |
 | `qebab.py` | Provide an interactive hexadecimal TCP terminal for emulator communication. |
