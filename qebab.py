@@ -1,6 +1,5 @@
 # Copyright (c) TOLOSAT 2026
 # SPDX-License-Identifier: Apache-2.0
-
 import socket
 import threading
 import curses
@@ -161,14 +160,15 @@ def main(stdscr):
         # separator line
         tx_win.hline(0, 0, curses.ACS_HLINE, width)
 
-        tx_win.addstr(1, 2, "QEBAB (HEX) > ")
+        prompt = "QEBAB (HEX) > "
+        tx_win.addstr(1, 0, prompt)
 
         tx_win.refresh()
 
         curses.echo()
 
         try:
-            cmd = tx_win.getstr(1, 9).decode().strip()
+            cmd = tx_win.getstr(1, len(prompt)).decode().strip()
         except KeyboardInterrupt:
             shutdown = True
             break
